@@ -1,0 +1,915 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "REST API for Asgard Party Slot.",
+        "title": "Asgard Party Server",
+        "contact": {},
+        "version": "1.0.1"
+    },
+    "host": "0.0.0.0:8086",
+    "basePath": "/",
+    "paths": {
+        "/cheat/custom_figures": {
+            "post": {
+                "description": "Set next spin to be with custom figures from request",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cheat"
+                ],
+                "summary": "Cheat custom figures",
+                "parameters": [
+                    {
+                        "description": "body for exec cheat",
+                        "name": "JSON",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.CheatCustomFiguresRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.NoContentResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/http.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/http.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/core/free_spins/get": {
+            "get": {
+                "description": "get available free spins",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "core"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "name": "session_token",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.GetFreeSpinsResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/http.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/http.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/http.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/core/spin_indexes/update": {
+            "post": {
+                "description": "important restoring endpoint which gives an opportunity to track shown spins",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "core"
+                ],
+                "parameters": [
+                    {
+                        "description": "update spin indexes",
+                        "name": "spin_indexes",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.UpdateSpinsIndexesRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.NoContentResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/http.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/http.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/http.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/core/spins_history": {
+            "get": {
+                "description": "Retrieves user's spins history",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "core"
+                ],
+                "summary": "Get spins history",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "session token",
+                        "name": "session_token",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page",
+                        "name": "page",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "count",
+                        "name": "count",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.HistoryPagination"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/http.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/http.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/core/state": {
+            "post": {
+                "description": "Retrieves an initial state of the game from the bet-overlord service.\nFor every new session you need to send /state request. /br In response you'll get a session token for a bets placing.\nMock data: integrator - MOCK, game - TEST, params example - { \"user\": \"58e361be-2edc-4b4e-bf24-5a348a5eff3c\", \"token\": \"04e717e7-e5af-42eb-8c67-08aa647b5c7b\", \"game\": \"test\", \"integrator\": \"MOCK\" }",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "core"
+                ],
+                "summary": "State",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "session id from game client",
+                        "name": "session_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "integrator name",
+                        "name": "integrator",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "game id",
+                        "name": "game",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "special integrator parameters",
+                        "name": "params",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.StateResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/http.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/http.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/core/wager": {
+            "post": {
+                "description": "Make a bet (spin).",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "core"
+                ],
+                "summary": "Place a bet",
+                "parameters": [
+                    {
+                        "description": "body for a making bet(spin)",
+                        "name": "JSON",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.PlaceWagerRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.SessionState"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/http.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/http.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/health": {
+            "get": {
+                "description": "Check service health.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "meta"
+                ],
+                "summary": "Check health.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.HealthResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/info": {
+            "get": {
+                "description": "Check service tag.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "meta"
+                ],
+                "summary": "Check tag.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/responses.InfoResponse"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "entities.FreeSpin": {
+            "type": "object",
+            "properties": {
+                "currency": {
+                    "type": "string"
+                },
+                "expire_date": {
+                    "type": "string"
+                },
+                "game": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "spin_count": {
+                    "type": "integer"
+                },
+                "value": {
+                    "type": "integer"
+                }
+            }
+        },
+        "entities.History": {
+            "type": "object",
+            "properties": {
+                "balance": {
+                    "type": "integer"
+                },
+                "base_pay": {
+                    "type": "integer"
+                },
+                "bet": {
+                    "type": "integer"
+                },
+                "bonus_pay": {
+                    "type": "integer"
+                },
+                "currency": {
+                    "type": "string"
+                },
+                "final_balance": {
+                    "type": "integer"
+                },
+                "finish_time": {
+                    "type": "integer"
+                },
+                "game": {
+                    "type": "string"
+                },
+                "integrator": {
+                    "type": "string"
+                },
+                "is_pfr": {
+                    "type": "boolean"
+                },
+                "reels": {
+                    "$ref": "#/definitions/game.State"
+                },
+                "restoring_indexes": {
+                    "$ref": "#/definitions/entities.SpinIndexes"
+                },
+                "round_id": {
+                    "type": "string"
+                },
+                "session_token": {
+                    "type": "string"
+                },
+                "start_time": {
+                    "type": "integer"
+                },
+                "transaction_id": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.HistoryPagination": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "current_page": {
+                    "type": "integer"
+                },
+                "spins_history": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entities.History"
+                    }
+                },
+                "total": {
+                    "type": "integer"
+                }
+            }
+        },
+        "entities.SessionState": {
+            "type": "object",
+            "properties": {
+                "THE_EJAW_SLOT": {
+                    "type": "string"
+                },
+                "balance": {
+                    "type": "integer"
+                },
+                "currency": {
+                    "type": "integer"
+                },
+                "default_wager": {
+                    "type": "integer"
+                },
+                "error": {
+                    "type": "string"
+                },
+                "freespinid": {
+                    "type": "integer"
+                },
+                "last_wager": {
+                    "type": "integer"
+                },
+                "reels": {
+                    "$ref": "#/definitions/game.State"
+                },
+                "session_token": {
+                    "type": "string"
+                },
+                "spins_indexes": {
+                    "$ref": "#/definitions/entities.SpinsIndexes"
+                },
+                "total_wins": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string"
+                },
+                "wager_levels": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "wallet_play_id": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.SpinIndexes": {
+            "type": "object",
+            "properties": {
+                "base_spin_index": {
+                    "type": "integer"
+                },
+                "bonus_spin_index": {
+                    "type": "integer"
+                }
+            }
+        },
+        "entities.SpinsIndexes": {
+            "type": "object",
+            "properties": {
+                "base_spin_index": {
+                    "type": "integer"
+                },
+                "bonus_spin_index": {
+                    "type": "integer"
+                }
+            }
+        },
+        "game.BaseSpin": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "integer",
+                    "example": 100
+                },
+                "stages": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/game.BaseStage"
+                    }
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "game.BaseStage": {
+            "type": "object",
+            "properties": {
+                "bonus_game": {
+                    "description": "State{}"
+                },
+                "multiplier": {
+                    "type": "integer"
+                },
+                "new_figures_position": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/game.FigurePosition"
+                    }
+                },
+                "new_reel_figures": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/game.Figure"
+                    }
+                },
+                "new_top_figures": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/game.Figure"
+                    }
+                },
+                "payouts": {
+                    "$ref": "#/definitions/game.Payouts"
+                }
+            }
+        },
+        "game.BonusSpin": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "integer",
+                    "example": 100
+                },
+                "free_spins_left": {
+                    "type": "integer"
+                },
+                "stages": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/game.BonusStage"
+                    }
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "game.BonusStage": {
+            "type": "object",
+            "properties": {
+                "multiplier": {
+                    "type": "integer"
+                },
+                "new_figures_position": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/game.FigurePosition"
+                    }
+                },
+                "new_reel_figures": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/game.Figure"
+                    }
+                },
+                "new_top_figures": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/game.Figure"
+                    }
+                },
+                "payouts": {
+                    "$ref": "#/definitions/game.Payouts"
+                }
+            }
+        },
+        "game.Figure": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "x": {
+                    "type": "integer"
+                },
+                "y": {
+                    "type": "integer"
+                }
+            }
+        },
+        "game.FigurePosition": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "x": {
+                    "type": "integer"
+                },
+                "y": {
+                    "type": "integer"
+                }
+            }
+        },
+        "game.Payout": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "integer",
+                    "example": 100
+                },
+                "count": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    },
+                    "example": [
+                        5
+                    ]
+                },
+                "figures": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    },
+                    "example": [
+                        5
+                    ]
+                },
+                "symbol": {
+                    "type": "string",
+                    "example": "A"
+                }
+            }
+        },
+        "game.Payouts": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "integer"
+                },
+                "values": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/game.Payout"
+                    }
+                }
+            }
+        },
+        "game.Spin": {
+            "type": "object",
+            "properties": {
+                "baseSpin": {
+                    "$ref": "#/definitions/game.BaseSpin"
+                },
+                "bonusSpin": {
+                    "$ref": "#/definitions/game.BonusSpin"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "game.State": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "integer"
+                },
+                "is_autospin": {
+                    "type": "boolean"
+                },
+                "is_cheat_stops": {
+                    "type": "boolean"
+                },
+                "is_turbospin": {
+                    "type": "boolean"
+                },
+                "spins": {
+                    "description": "BaseSpin{} or BonusSpin{}",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/game.Spin"
+                    }
+                }
+            }
+        },
+        "http.Response": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "meta": {
+                    "type": "object",
+                    "additionalProperties": true
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "requests.CheatCustomFiguresRequest": {
+            "type": "object",
+            "properties": {
+                "figures": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "session_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "requests.PlaceWagerRequest": {
+            "type": "object",
+            "required": [
+                "currency",
+                "session_token",
+                "wager"
+            ],
+            "properties": {
+                "currency": {
+                    "type": "string"
+                },
+                "freespin_id": {
+                    "type": "string"
+                },
+                "session_token": {
+                    "type": "string"
+                },
+                "wager": {
+                    "type": "integer"
+                }
+            }
+        },
+        "requests.UpdateSpinsIndexesRequest": {
+            "type": "object",
+            "required": [
+                "base_spin_index",
+                "bonus_spin_index",
+                "session_token"
+            ],
+            "properties": {
+                "base_spin_index": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "bonus_spin_index": {
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "session_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.GetFreeSpinsResponse": {
+            "type": "object",
+            "properties": {
+                "freespins": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entities.FreeSpin"
+                    }
+                }
+            }
+        },
+        "responses.HealthResponse": {
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.InfoResponse": {
+            "type": "object",
+            "properties": {
+                "tag": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.NoContentResponse": {
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "responses.StateResponse": {
+            "type": "object",
+            "properties": {
+                "THE_EJAW_SLOT": {
+                    "type": "string"
+                },
+                "balance": {
+                    "type": "integer"
+                },
+                "currency": {
+                    "type": "integer"
+                },
+                "default_wager": {
+                    "type": "integer"
+                },
+                "error": {
+                    "type": "string"
+                },
+                "freespinid": {
+                    "type": "integer"
+                },
+                "last_wager": {
+                    "type": "integer"
+                },
+                "reels": {
+                    "$ref": "#/definitions/game.State"
+                },
+                "session_token": {
+                    "type": "string"
+                },
+                "spins_indexes": {
+                    "$ref": "#/definitions/entities.SpinsIndexes"
+                },
+                "total_wins": {
+                    "type": "integer"
+                },
+                "username": {
+                    "type": "string"
+                },
+                "wager_levels": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "wallet_play_id": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

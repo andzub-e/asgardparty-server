@@ -1,0 +1,607 @@
+basePath: /
+definitions:
+  entities.FreeSpin:
+    properties:
+      currency:
+        type: string
+      expire_date:
+        type: string
+      game:
+        type: string
+      id:
+        type: string
+      spin_count:
+        type: integer
+      value:
+        type: integer
+    type: object
+  entities.History:
+    properties:
+      balance:
+        type: integer
+      base_pay:
+        type: integer
+      bet:
+        type: integer
+      bonus_pay:
+        type: integer
+      currency:
+        type: string
+      final_balance:
+        type: integer
+      finish_time:
+        type: integer
+      game:
+        type: string
+      integrator:
+        type: string
+      is_pfr:
+        type: boolean
+      reels:
+        $ref: '#/definitions/game.State'
+      restoring_indexes:
+        $ref: '#/definitions/entities.SpinIndexes'
+      round_id:
+        type: string
+      session_token:
+        type: string
+      start_time:
+        type: integer
+      transaction_id:
+        type: string
+      user_id:
+        type: string
+    type: object
+  entities.HistoryPagination:
+    properties:
+      count:
+        type: integer
+      current_page:
+        type: integer
+      spins_history:
+        items:
+          $ref: '#/definitions/entities.History'
+        type: array
+      total:
+        type: integer
+    type: object
+  entities.SessionState:
+    properties:
+      THE_EJAW_SLOT:
+        type: string
+      balance:
+        type: integer
+      currency:
+        type: integer
+      default_wager:
+        type: integer
+      error:
+        type: string
+      freespinid:
+        type: integer
+      last_wager:
+        type: integer
+      reels:
+        $ref: '#/definitions/game.State'
+      session_token:
+        type: string
+      spins_indexes:
+        $ref: '#/definitions/entities.SpinsIndexes'
+      total_wins:
+        type: integer
+      username:
+        type: string
+      wager_levels:
+        items:
+          type: integer
+        type: array
+      wallet_play_id:
+        type: string
+    type: object
+  entities.SpinIndexes:
+    properties:
+      base_spin_index:
+        type: integer
+      bonus_spin_index:
+        type: integer
+    type: object
+  entities.SpinsIndexes:
+    properties:
+      base_spin_index:
+        type: integer
+      bonus_spin_index:
+        type: integer
+    type: object
+  game.BaseSpin:
+    properties:
+      amount:
+        example: 100
+        type: integer
+      stages:
+        items:
+          $ref: '#/definitions/game.BaseStage'
+        type: array
+      type:
+        type: string
+    type: object
+  game.BaseStage:
+    properties:
+      bonus_game:
+        description: State{}
+      multiplier:
+        type: integer
+      new_figures_position:
+        items:
+          $ref: '#/definitions/game.FigurePosition'
+        type: array
+      new_reel_figures:
+        items:
+          $ref: '#/definitions/game.Figure'
+        type: array
+      new_top_figures:
+        items:
+          $ref: '#/definitions/game.Figure'
+        type: array
+      payouts:
+        $ref: '#/definitions/game.Payouts'
+    type: object
+  game.BonusSpin:
+    properties:
+      amount:
+        example: 100
+        type: integer
+      free_spins_left:
+        type: integer
+      stages:
+        items:
+          $ref: '#/definitions/game.BonusStage'
+        type: array
+      type:
+        type: string
+    type: object
+  game.BonusStage:
+    properties:
+      multiplier:
+        type: integer
+      new_figures_position:
+        items:
+          $ref: '#/definitions/game.FigurePosition'
+        type: array
+      new_reel_figures:
+        items:
+          $ref: '#/definitions/game.Figure'
+        type: array
+      new_top_figures:
+        items:
+          $ref: '#/definitions/game.Figure'
+        type: array
+      payouts:
+        $ref: '#/definitions/game.Payouts'
+    type: object
+  game.Figure:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      x:
+        type: integer
+      "y":
+        type: integer
+    type: object
+  game.FigurePosition:
+    properties:
+      id:
+        type: integer
+      x:
+        type: integer
+      "y":
+        type: integer
+    type: object
+  game.Payout:
+    properties:
+      amount:
+        example: 100
+        type: integer
+      count:
+        example:
+        - 5
+        items:
+          type: integer
+        type: array
+      figures:
+        example:
+        - 5
+        items:
+          type: integer
+        type: array
+      symbol:
+        example: A
+        type: string
+    type: object
+  game.Payouts:
+    properties:
+      amount:
+        type: integer
+      values:
+        items:
+          $ref: '#/definitions/game.Payout'
+        type: array
+    type: object
+  game.Spin:
+    properties:
+      baseSpin:
+        $ref: '#/definitions/game.BaseSpin'
+      bonusSpin:
+        $ref: '#/definitions/game.BonusSpin'
+      type:
+        type: string
+    type: object
+  game.State:
+    properties:
+      amount:
+        type: integer
+      is_autospin:
+        type: boolean
+      is_cheat_stops:
+        type: boolean
+      is_turbospin:
+        type: boolean
+      spins:
+        description: BaseSpin{} or BonusSpin{}
+        items:
+          $ref: '#/definitions/game.Spin'
+        type: array
+    type: object
+  http.Response:
+    properties:
+      data: {}
+      meta:
+        additionalProperties: true
+        type: object
+      status:
+        type: integer
+      success:
+        type: boolean
+    type: object
+  requests.CheatCustomFiguresRequest:
+    properties:
+      figures:
+        items:
+          type: string
+        type: array
+      session_token:
+        type: string
+    type: object
+  requests.PlaceWagerRequest:
+    properties:
+      currency:
+        type: string
+      freespin_id:
+        type: string
+      session_token:
+        type: string
+      wager:
+        type: integer
+    required:
+    - currency
+    - session_token
+    - wager
+    type: object
+  requests.UpdateSpinsIndexesRequest:
+    properties:
+      base_spin_index:
+        minimum: 0
+        type: integer
+      bonus_spin_index:
+        minimum: 0
+        type: integer
+      session_token:
+        type: string
+    required:
+    - base_spin_index
+    - bonus_spin_index
+    - session_token
+    type: object
+  responses.GetFreeSpinsResponse:
+    properties:
+      freespins:
+        items:
+          $ref: '#/definitions/entities.FreeSpin'
+        type: array
+    type: object
+  responses.HealthResponse:
+    properties:
+      success:
+        type: string
+    type: object
+  responses.InfoResponse:
+    properties:
+      tag:
+        type: string
+    type: object
+  responses.NoContentResponse:
+    properties:
+      success:
+        type: boolean
+    type: object
+  responses.StateResponse:
+    properties:
+      THE_EJAW_SLOT:
+        type: string
+      balance:
+        type: integer
+      currency:
+        type: integer
+      default_wager:
+        type: integer
+      error:
+        type: string
+      freespinid:
+        type: integer
+      last_wager:
+        type: integer
+      reels:
+        $ref: '#/definitions/game.State'
+      session_token:
+        type: string
+      spins_indexes:
+        $ref: '#/definitions/entities.SpinsIndexes'
+      total_wins:
+        type: integer
+      username:
+        type: string
+      wager_levels:
+        items:
+          type: integer
+        type: array
+      wallet_play_id:
+        type: string
+    type: object
+host: 0.0.0.0:8086
+info:
+  contact: {}
+  description: REST API for Asgard Party Slot.
+  title: Asgard Party Server
+  version: 1.0.1
+paths:
+  /cheat/custom_figures:
+    post:
+      consumes:
+      - application/json
+      description: Set next spin to be with custom figures from request
+      parameters:
+      - description: body for exec cheat
+        in: body
+        name: JSON
+        required: true
+        schema:
+          $ref: '#/definitions/requests.CheatCustomFiguresRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.NoContentResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.Response'
+      summary: Cheat custom figures
+      tags:
+      - cheat
+  /core/free_spins/get:
+    get:
+      consumes:
+      - application/json
+      description: get available free spins
+      parameters:
+      - in: query
+        name: session_token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.GetFreeSpinsResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/http.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.Response'
+      tags:
+      - core
+  /core/spin_indexes/update:
+    post:
+      consumes:
+      - application/json
+      description: important restoring endpoint which gives an opportunity to track
+        shown spins
+      parameters:
+      - description: update spin indexes
+        in: body
+        name: spin_indexes
+        required: true
+        schema:
+          $ref: '#/definitions/requests.UpdateSpinsIndexesRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.NoContentResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/http.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.Response'
+      tags:
+      - core
+  /core/spins_history:
+    get:
+      description: Retrieves user's spins history
+      parameters:
+      - description: session token
+        in: query
+        name: session_token
+        required: true
+        type: string
+      - description: page
+        in: query
+        name: page
+        required: true
+        type: integer
+      - description: count
+        in: query
+        name: count
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.HistoryPagination'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.Response'
+      summary: Get spins history
+      tags:
+      - core
+  /core/state:
+    post:
+      consumes:
+      - application/json
+      description: |-
+        Retrieves an initial state of the game from the bet-overlord service.
+        For every new session you need to send /state request. /br In response you'll get a session token for a bets placing.
+        Mock data: integrator - MOCK, game - TEST, params example - { "user": "58e361be-2edc-4b4e-bf24-5a348a5eff3c", "token": "04e717e7-e5af-42eb-8c67-08aa647b5c7b", "game": "test", "integrator": "MOCK" }
+      parameters:
+      - description: session id from game client
+        in: query
+        name: session_id
+        required: true
+        type: string
+      - description: integrator name
+        in: query
+        name: integrator
+        required: true
+        type: string
+      - description: game id
+        in: query
+        name: game
+        required: true
+        type: string
+      - description: special integrator parameters
+        in: query
+        name: params
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.StateResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.Response'
+      summary: State
+      tags:
+      - core
+  /core/wager:
+    post:
+      consumes:
+      - application/json
+      description: Make a bet (spin).
+      parameters:
+      - description: body for a making bet(spin)
+        in: body
+        name: JSON
+        required: true
+        schema:
+          $ref: '#/definitions/requests.PlaceWagerRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.SessionState'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/http.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/http.Response'
+      summary: Place a bet
+      tags:
+      - core
+  /health:
+    get:
+      consumes:
+      - application/json
+      description: Check service health.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.HealthResponse'
+      summary: Check health.
+      tags:
+      - meta
+  /info:
+    get:
+      consumes:
+      - application/json
+      description: Check service tag.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/responses.InfoResponse'
+      summary: Check tag.
+      tags:
+      - meta
+swagger: "2.0"

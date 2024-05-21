@@ -1,0 +1,46 @@
+engine:
+  isCheatsAvailable: false
+
+server:
+  host: 0.0.0.0
+  port: 8086
+  readTimeout: 30s
+  writeTimeout: 30s
+  maxProcessingTime: 10000 #ms
+
+overlord:
+  host: overlord
+  port: 7001
+
+history:
+  host: 0.0.0.0
+  port: 7500
+  isSecure: false
+
+rng:
+  host: rng
+  port: 7010
+  maxProcessingTime: 10000 #ms
+
+database:
+  host: server-db
+  port: 5432
+  name: postgres
+  user: postgres
+  pass: "12345"
+  connectionTimeout: 30s
+  compression: zlib
+  pingInterval: 30s
+  minConnections: 10
+  maxConnections: 20
+
+tracer:
+  url: tracer/api/traces
+  serviceName: asgardparty
+
+game:
+  availableGames:
+    - asgardparty
+    - ego-draconis
+  availableIntegrators:
+    - mock
